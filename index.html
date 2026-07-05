@@ -3,64 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yourself - Personal OS</title>
+    <title>Yourself - Personal Operating System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f7f4;
-            --sidebar-color: #ffffff;
-            --accent-color: #7d9d85; /* Màu xanh Sage dịu mắt */
-            --text-color: #3e4a47;
-            --card-bg: #ffffff;
-            --danger: #e5a9a9;
+            --bg: #f4f7f4;
+            --sidebar: #2d3436;
+            --accent: #7d9d85; /* Sage Green */
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #eef2ee;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; }
 
-        /* Sidebar điều hướng */
-        nav { width: 240px; background: var(--sidebar-color); padding: 2rem 1.5rem; border-right: 1px solid #e0eadd; display: flex; flex-direction: column; }
-        nav h1 { font-size: 1.4rem; margin-bottom: 2.5rem; color: var(--accent-color); letter-spacing: 3px; font-weight: 600; text-align: center; }
+        /* SIDEBAR */
+        nav { width: 260px; background: var(--sidebar); color: white; padding: 2rem 1rem; display: flex; flex-direction: column; }
+        nav h1 { font-size: 1.5rem; margin-bottom: 2rem; letter-spacing: 4px; text-align: center; color: var(--accent); }
         nav ul { list-style: none; }
-        nav ul li { padding: 12px 15px; cursor: pointer; transition: 0.3s; font-weight: 500; border-radius: 8px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
-        nav ul li:hover { background: #f0f4f0; color: var(--accent-color); }
-        nav ul li.active { background: var(--accent-color); color: white; }
+        nav ul li { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 8px; transition: 0.3s; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+        nav ul li:hover { background: rgba(255,255,255,0.1); }
+        nav ul li.active { background: var(--accent); color: white; }
 
-        /* Vùng nội dung chính */
-        main { flex: 1; padding: 2.5rem; overflow-y: auto; scroll-behavior: smooth; }
+        /* MAIN CONTENT */
+        main { flex: 1; padding: 2rem; overflow-y: auto; }
         .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.5s ease; }
+        .section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h2 { font-weight: 600; margin-bottom: 1.5rem; font-size: 1.5rem; color: var(--text); }
 
-        .header-box { margin-bottom: 2rem; }
-        .header-box h2 { font-weight: 300; font-size: 1.8rem; color: #5a6b67; }
+        /* GRID SYSTEM */
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
 
-        /* Thẻ Card */
-        .card { background: var(--card-bg); padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 1.5rem; border: 1px solid #eef2ee; }
-        .card h3 { margin-bottom: 1.2rem; font-size: 1rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px; }
+        /* CARDS */
+        .card { background: var(--card); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border: 1px solid var(--border); }
+        .card h3 { font-size: 0.9rem; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
 
-        /* Form nhập liệu */
-        .input-group { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        input, select { padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; outline: none; flex: 1; min-width: 150px; }
-        button { padding: 10px 20px; border-radius: 8px; border: none; background: var(--accent-color); color: white; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        /* FORMS */
+        .input-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+        input, select, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; font-size: 0.85rem; }
+        button { background: var(--accent); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        button:hover { opacity: 0.9; }
 
-        /* Danh sách hiển thị */
-        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f8f8f8; transition: 0.2s; }
-        .list-item:hover { background: #fafafa; }
-        .list-item.done span { text-decoration: line-through; color: #aaa; }
-        .delete-btn { color: var(--danger); cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+        /* LISTS */
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #fafafa; font-size: 0.9rem; }
+        .item:hover { background: #fdfdfd; }
+        .time-tag { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; margin-right: 8px; font-weight: 600; }
+        .delete-btn { color: #fab1a0; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
-        /* Thanh tiến trình (Progress bar) */
-        .progress-container { background: #eee; border-radius: 10px; height: 10px; width: 100%; margin-top: 8px; position: relative; }
-        .progress-bar { background: var(--accent-color); height: 100%; border-radius: 10px; transition: 0.5s; width: 0%; }
+        /* PLANNING SPECIALS */
+        .plan-box { min-height: 100px; background: #fcfdfc; border: 1px dashed #d1dbd1; border-radius: 8px; padding: 10px; }
+        .category-tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; color: white; margin-right: 5px; }
+        .tag-work { background: #74b9ff; }
+        .tag-skill { background: #a29bfe; }
+        .tag-lang { background: #fdcb6e; }
 
-        /* Dashboard đặc biệt */
-        .db-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: white; padding: 1.5rem; border-radius: 16px; text-align: center; border-bottom: 4px solid var(--accent-color); }
-        .stat-card p { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
-        .stat-card h4 { font-size: 1.5rem; color: var(--text-color); }
+        /* MEAL PLAN TABLE */
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { border: 1px solid #eee; padding: 10px; text-align: left; }
+        th { background: #f8faf8; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -68,236 +73,235 @@
     <nav>
         <h1>YOURSELF</h1>
         <ul>
-            <li class="active" onclick="switchTab('dashboard')">🏠 Tổng quan</li>
-            <li onclick="switchTab('tasks')">✅ Công việc</li>
-            <li onclick="switchTab('finance')">💰 Chi tiêu</li>
-            <li onclick="switchTab('growth')">📈 Phát triển</li>
-            <li onclick="switchTab('books')">📖 Tủ sách</li>
+            <li class="active" onclick="switchTab('dashboard')">🏠 Dashboard</li>
+            <li onclick="switchTab('planning')">📅 Strategic Plan</li>
+            <li onclick="switchTab('daily')">☀️ Daily Focus</li>
+            <li onclick="switchTab('finance')">💰 Finance & Meals</li>
+            <li onclick="switchTab('library')">📖 Library</li>
         </ul>
     </nav>
 
     <main>
-        <!-- TAB: DASHBOARD -->
+        <!-- SECTION: DASHBOARD (TỔNG QUAN) -->
         <section id="dashboard" class="section active">
-            <div class="header-box">
-                <h2 id="welcome-msg">Chào ngày mới!</h2>
-                <p id="current-date" style="color: #888;"></p>
-            </div>
-            
-            <div class="db-grid">
-                <div class="stat-card">
-                    <p>Việc cần làm</p>
-                    <h4 id="stat-tasks">0</h4>
+            <h2>Hôm nay của bạn</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="card">
+                        <h3>Lịch trình 24h sắp tới</h3>
+                        <div id="db-timeline"></div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <p>Số dư ví</p>
-                    <h4 id="stat-money">0đ</h4>
+                <div>
+                    <div class="card">
+                        <h3>Mục tiêu tháng này</h3>
+                        <ul id="db-month-goals" style="list-style: none;"></ul>
+                    </div>
+                    <div class="card">
+                        <h3>Plan ăn uống hôm nay</h3>
+                        <p id="db-meal" style="font-size: 0.9rem; color: var(--text-light);"></p>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <p>Sách đang đọc</p>
-                    <h4 id="stat-books">0</h4>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Câu nói động lực</h3>
-                <p id="quote-display" style="font-style: italic; color: #5a6b67;">"Cách duy nhất để làm được những việc tuyệt vời là yêu những gì bạn làm."</p>
             </div>
         </section>
 
-        <!-- TAB: CÔNG VIỆC -->
-        <section id="tasks" class="section">
+        <!-- SECTION: STRATEGIC PLANNING (TUẦN/THÁNG) -->
+        <section id="planning" class="section">
+            <h2>Kế hoạch chiến lược</h2>
             <div class="card">
-                <h3>Công việc cần xử lý</h3>
-                <div class="input-group">
-                    <input type="text" id="taskInput" placeholder="Thêm việc mới...">
-                    <button onclick="addTask()">Thêm</button>
+                <h3>Plan Tháng (Mục tiêu lớn)</h3>
+                <div class="input-row">
+                    <input type="text" id="monthGoalInput" style="flex:3" placeholder="Mục tiêu lớn trong tháng...">
+                    <button onclick="addMonthGoal()">Thêm mục tiêu</button>
                 </div>
-                <div id="taskList"></div>
+                <div id="monthGoalList"></div>
+            </div>
+
+            <div class="card">
+                <h3>Plan Tuần (Phân bổ nguồn lực)</h3>
+                <div class="grid-3">
+                    <div class="plan-box">
+                        <strong style="font-size: 0.8rem;">FULL-TIME JOB</strong>
+                        <textarea id="planWork" placeholder="Công việc chính..." style="width:100%; height:80px; margin-top:5px; border:none; background:transparent;"></textarea>
+                    </div>
+                    <div class="plan-box">
+                        <strong style="font-size: 0.8rem;">SKILLS (Kỹ năng mới)</strong>
+                        <textarea id="planSkill" placeholder="Học kỹ năng..." style="width:100%; height:80px; margin-top:5px; border:none; background:transparent;"></textarea>
+                    </div>
+                    <div class="plan-box">
+                        <strong style="font-size: 0.8rem;">LANGUAGES (Ngôn ngữ)</strong>
+                        <textarea id="planLang" placeholder="Học ngoại ngữ..." style="width:100%; height:80px; margin-top:5px; border:none; background:transparent;"></textarea>
+                    </div>
+                </div>
+                <button onclick="saveWeeklyPlan()" style="margin-top:10px">Lưu Plan Tuần</button>
             </div>
         </section>
 
-        <!-- TAB: CHI TIÊU -->
-        <section id="finance" class="section">
+        <!-- SECTION: DAILY FOCUS (TO-DO CÓ DEADLINE) -->
+        <section id="daily" class="section">
+            <h2>Focus Hôm nay</h2>
             <div class="card">
-                <h3>Quản lý chi tiêu</h3>
-                <div class="input-group">
-                    <input type="text" id="finName" placeholder="Nội dung (VD: Ăn sáng)">
-                    <input type="number" id="finAmount" placeholder="Số tiền (VNĐ)">
-                    <select id="finType">
-                        <option value="out">Chi ra</option>
-                        <option value="in">Thu vào</option>
+                <h3>To-do list & Deadlines</h3>
+                <div class="input-row">
+                    <input type="time" id="todoTime" style="flex:1">
+                    <input type="text" id="todoTask" style="flex:3" placeholder="Bạn cần làm gì?">
+                    <select id="todoCat">
+                        <option value="work">Job</option>
+                        <option value="skill">Kỹ năng</option>
+                        <option value="lang">Ngôn ngữ</option>
+                        <option value="other">Khác</option>
                     </select>
-                    <button onclick="addFinance()">Lưu</button>
+                    <button onclick="addTodo()">Thêm việc</button>
                 </div>
-                <div id="financeList"></div>
+                <div id="todoList"></div>
             </div>
         </section>
 
-        <!-- TAB: PHÁT TRIỂN -->
-        <section id="growth" class="section">
-            <div class="card">
-                <h3>Kỹ năng đang học</h3>
-                <div class="input-group">
-                    <input type="text" id="skillName" placeholder="Tên kỹ năng (VD: Tiếng Anh)">
-                    <input type="number" id="skillPercent" placeholder="Tiến độ % (0-100)">
-                    <button onclick="addSkill()">Thêm</button>
+        <!-- SECTION: FINANCE & MEALS -->
+        <section id="finance" class="section">
+            <h2>Chi tiêu & Dinh dưỡng</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Chi tiết Chi tiêu</h3>
+                    <div class="input-row">
+                        <input type="text" id="finName" placeholder="Nội dung">
+                        <input type="number" id="finAmt" placeholder="VNĐ">
+                        <select id="finCat">
+                            <option value="Food">Ăn uống</option>
+                            <option value="Move">Di chuyển</option>
+                            <option value="Home">Sinh hoạt</option>
+                        </select>
+                        <button onclick="addFinance()">Lưu</button>
+                    </div>
+                    <div id="financeList"></div>
                 </div>
-                <div id="skillList"></div>
+                <div class="card">
+                    <h3>Meal Plan (Thực đơn tuần)</h3>
+                    <table>
+                        <tr><th>Bữa</th><th>Thực đơn</th></tr>
+                        <tr><td>Sáng</td><td><input type="text" id="mealS" style="width:100%; border:none;"></td></tr>
+                        <tr><td>Trưa</td><td><input type="text" id="mealT" style="width:100%; border:none;"></td></tr>
+                        <tr><td>Tối</td><td><input type="text" id="mealToi" style="width:100%; border:none;"></td></tr>
+                    </table>
+                    <button onclick="saveMeal()" style="margin-top:10px; width:100%;">Cập nhật thực đơn</button>
+                </div>
             </div>
         </section>
 
-        <!-- TAB: TỦ SÁCH -->
-        <section id="books" class="section">
+        <!-- SECTION: LIBRARY (SÁCH) -->
+        <section id="library" class="section">
+            <h2>Tủ sách phát triển</h2>
             <div class="card">
-                <h3>Tủ sách cá nhân</h3>
-                <div class="input-group">
-                    <input type="text" id="bookTitle" placeholder="Tên sách">
-                    <input type="number" id="bookCurrent" placeholder="Trang hiện tại">
-                    <input type="number" id="bookTotal" placeholder="Tổng số trang">
-                    <button onclick="addBook()">Thêm sách</button>
+                <div class="input-row">
+                    <input type="text" id="bookName" placeholder="Tên sách">
+                    <input type="number" id="bookPage" placeholder="Trang hiện tại">
+                    <button onclick="addBook()">Thêm vào kệ</button>
                 </div>
-                <div id="bookList"></div>
+                <div id="bookList" class="grid-3"></div>
             </div>
         </section>
     </main>
 
     <script>
-        // QUẢN LÝ DỮ LIỆU BẰNG LOCALSTORAGE
-        let data = JSON.parse(localStorage.getItem('yourself_data')) || {
-            tasks: [],
+        // DỮ LIỆU CƠ SỞ
+        let db = JSON.parse(localStorage.getItem('yourself_v2')) || {
+            monthGoals: [],
+            weekly: { work: '', skill: '', lang: '' },
+            daily: [],
             finance: [],
-            skills: [],
+            meals: { s: '', t: '', toi: '' },
             books: []
         };
 
-        function saveData() {
-            localStorage.setItem('yourself_data', JSON.stringify(data));
-            renderAll();
+        function save() { 
+            localStorage.setItem('yourself_v2', JSON.stringify(db)); 
+            render(); 
         }
 
-        // CHUYỂN TAB
-        function switchTab(tabId) {
+        function switchTab(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('nav li').forEach(l => l.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        // NGÀY THÁNG
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('vi-VN', options);
+        // CHỨC NĂNG CỤ THỂ
+        function addMonthGoal() {
+            const val = document.getElementById('monthGoalInput').value;
+            if(val) { db.monthGoals.push(val); document.getElementById('monthGoalInput').value=''; save(); }
+        }
 
-        // --- CÁC HÀM XỬ LÝ ---
+        function saveWeeklyPlan() {
+            db.weekly.work = document.getElementById('planWork').value;
+            db.weekly.skill = document.getElementById('planSkill').value;
+            db.weekly.lang = document.getElementById('planLang').value;
+            alert("Đã lưu kế hoạch tuần!");
+            save();
+        }
 
-        function addTask() {
-            const input = document.getElementById('taskInput');
-            if (!input.value) return;
-            data.tasks.push({ text: input.value, done: false });
-            input.value = '';
-            saveData();
+        function addTodo() {
+            const time = document.getElementById('todoTime').value;
+            const task = document.getElementById('todoTask').value;
+            const cat = document.getElementById('todoCat').value;
+            if(time && task) { db.daily.push({time, task, cat, done: false}); save(); }
         }
 
         function addFinance() {
-            const name = document.getElementById('finName');
-            const amount = document.getElementById('finAmount');
-            const type = document.getElementById('finType');
-            if (!name.value || !amount.value) return;
-            data.finance.push({ name: name.value, amount: parseInt(amount.value), type: type.value });
-            name.value = ''; amount.value = '';
-            saveData();
+            const name = document.getElementById('finName').value;
+            const amt = document.getElementById('finAmt').value;
+            const cat = document.getElementById('finCat').value;
+            if(name && amt) { db.finance.push({name, amt, cat}); save(); }
         }
 
-        function addSkill() {
-            const name = document.getElementById('skillName');
-            const pct = document.getElementById('skillPercent');
-            if (!name.value || !pct.value) return;
-            data.skills.push({ name: name.value, pct: pct.value });
-            name.value = ''; pct.value = '';
-            saveData();
+        function saveMeal() {
+            db.meals.s = document.getElementById('mealS').value;
+            db.meals.t = document.getElementById('mealT').value;
+            db.meals.toi = document.getElementById('mealToi').value;
+            save();
         }
 
-        function addBook() {
-            const title = document.getElementById('bookTitle');
-            const curr = document.getElementById('bookCurrent');
-            const total = document.getElementById('bookTotal');
-            if (!title.value || !total.value) return;
-            data.books.push({ title: title.value, curr: curr.value || 0, total: total.value });
-            title.value = ''; curr.value = ''; total.value = '';
-            saveData();
+        function deleteItem(type, index) {
+            db[type].splice(index, 1);
+            save();
         }
 
-        // XÓA PHẦN TỬ
-        function deleteItem(category, index) {
-            data[category].splice(index, 1);
-            saveData();
-        }
+        // HIỂN THỊ
+        function render() {
+            // Dashboard
+            document.getElementById('db-month-goals').innerHTML = db.monthGoals.map(g => `<li>• ${g}</li>`).join('');
+            document.getElementById('db-timeline').innerHTML = db.daily
+                .sort((a,b) => a.time.localeCompare(b.time))
+                .map(d => `<div class="item"><span class="time-tag">${d.time}</span> ${d.task}</div>`).join('');
+            document.getElementById('db-meal').innerText = `Sáng: ${db.meals.s} | Trưa: ${db.meals.t} | Tối: ${db.meals.toi}`;
 
-        function toggleTask(index) {
-            data.tasks[index].done = !data.tasks[index].done;
-            saveData();
-        }
+            // Plan tháng
+            document.getElementById('monthGoalList').innerHTML = db.monthGoals.map((g, i) => `
+                <div class="item"><span>${g}</span><span class="delete-btn" onclick="deleteItem('monthGoals', ${i})">Xóa</span></div>
+            `).join('');
 
-        // --- HIỂN THỊ DỮ LIỆU ---
-        function renderAll() {
-            // Render Tasks
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = data.tasks.map((t, i) => `
-                <div class="list-item ${t.done ? 'done' : ''}">
-                    <span onclick="toggleTask(${i})" style="cursor:pointer">● ${t.text}</span>
-                    <span class="delete-btn" onclick="deleteItem('tasks', ${i})">Xóa</span>
+            // Daily To-do
+            document.getElementById('todoList').innerHTML = db.daily.map((d, i) => `
+                <div class="item">
+                    <span><span class="category-tag tag-${d.cat}">${d.cat}</span> <span class="time-tag">${d.time}</span> ${d.task}</span>
+                    <span class="delete-btn" onclick="deleteItem('daily', ${i})">Xóa</span>
                 </div>
             `).join('');
 
-            // Render Finance
-            let totalFinance = 0;
-            const financeList = document.getElementById('financeList');
-            financeList.innerHTML = data.finance.map((f, i) => {
-                totalFinance += (f.type === 'in' ? f.amount : -f.amount);
-                return `
-                <div class="list-item">
-                    <span>${f.name}</span>
-                    <span style="color: ${f.type === 'in' ? '#7d9d85' : '#e5a9a9'}">
-                        ${f.type === 'in' ? '+' : '-'}${f.amount.toLocaleString()}đ
-                    </span>
-                    <span class="delete-btn" onclick="deleteItem('finance', ${i})">Xóa</span>
-                </div>`;
-            }).join('');
-
-            // Render Skills
-            const skillList = document.getElementById('skillList');
-            skillList.innerHTML = data.skills.map((s, i) => `
-                <div style="margin-bottom:15px">
-                    <div style="display:flex; justify-content:space-between; font-size:0.9rem">
-                        <span>${s.name}</span><span>${s.pct}%</span>
-                    </div>
-                    <div class="progress-container"><div class="progress-bar" style="width:${s.pct}%"></div></div>
-                    <span class="delete-btn" onclick="deleteItem('skills', ${i})">Xóa</span>
-                </div>
+            // Finance
+            document.getElementById('financeList').innerHTML = db.finance.map((f, i) => `
+                <div class="item"><span><b>[${f.cat}]</b> ${f.name}</span> <span>${parseInt(f.amt).toLocaleString()}đ <span class="delete-btn" onclick="deleteItem('finance', ${i})">Xóa</span></span></div>
             `).join('');
 
-            // Render Books
-            const bookList = document.getElementById('bookList');
-            bookList.innerHTML = data.books.map((b, i) => {
-                const pct = Math.round((b.curr / b.total) * 100);
-                return `
-                <div style="margin-bottom:15px">
-                    <div style="display:flex; justify-content:space-between; font-size:0.9rem">
-                        <span><b>${b.title}</b> (Trang ${b.curr}/${b.total})</span><span>${pct}%</span>
-                    </div>
-                    <div class="progress-container"><div class="progress-bar" style="width:${pct}%"></div></div>
-                    <span class="delete-btn" onclick="deleteItem('books', ${i})">Xóa</span>
-                </div>`;
-            }).join('');
-
-            // Update Dashboard Stats
-            document.getElementById('stat-tasks').innerText = data.tasks.filter(t => !t.done).length;
-            document.getElementById('stat-money').innerText = totalFinance.toLocaleString() + 'đ';
-            document.getElementById('stat-books').innerText = data.books.length;
+            // Fill inputs (để không bị mất khi load lại)
+            document.getElementById('planWork').value = db.weekly.work;
+            document.getElementById('planSkill').value = db.weekly.skill;
+            document.getElementById('planLang').value = db.weekly.lang;
+            document.getElementById('mealS').value = db.meals.s;
+            document.getElementById('mealT').value = db.meals.t;
+            document.getElementById('mealToi').value = db.meals.toi;
         }
 
-        // Chạy lần đầu
-        renderAll();
+        render();
     </script>
 </body>
 </html>
