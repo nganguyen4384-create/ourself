@@ -3,125 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yourself - Hệ điều hành cá nhân</title>
+    <title>Yourself - Personal OS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f0f4f0;
+            --bg-color: #f4f7f4;
             --sidebar-color: #ffffff;
-            --accent-color: #8da399;
-            --text-color: #4a5553;
+            --accent-color: #7d9d85; /* Màu xanh Sage dịu mắt */
+            --text-color: #3e4a47;
             --card-bg: #ffffff;
-            --border-radius: 12px;
+            --danger: #e5a9a9;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; }
 
-        /* Sidebar */
-        nav { width: 250px; background: var(--sidebar-color); padding: 2rem; border-right: 1px solid #e0eadd; display: flex; flex-direction: column; }
-        nav h1 { font-size: 1.5rem; margin-bottom: 2rem; color: var(--accent-color); letter-spacing: 2px; }
+        /* Sidebar điều hướng */
+        nav { width: 240px; background: var(--sidebar-color); padding: 2rem 1.5rem; border-right: 1px solid #e0eadd; display: flex; flex-direction: column; }
+        nav h1 { font-size: 1.4rem; margin-bottom: 2.5rem; color: var(--accent-color); letter-spacing: 3px; font-weight: 600; text-align: center; }
         nav ul { list-style: none; }
-        nav ul li { padding: 12px 0; cursor: pointer; transition: 0.3s; font-weight: 500; }
-        nav ul li:hover { color: var(--accent-color); transform: translateX(5px); }
+        nav ul li { padding: 12px 15px; cursor: pointer; transition: 0.3s; font-weight: 500; border-radius: 8px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+        nav ul li:hover { background: #f0f4f0; color: var(--accent-color); }
+        nav ul li.active { background: var(--accent-color); color: white; }
 
-        /* Main Content */
-        main { flex: 1; padding: 3rem; overflow-y: auto; }
-        .header-date { margin-bottom: 2rem; }
-        .header-date h2 { font-weight: 300; font-size: 2rem; }
+        /* Vùng nội dung chính */
+        main { flex: 1; padding: 2.5rem; overflow-y: auto; scroll-behavior: smooth; }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.5s ease; }
 
-        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card-bg); padding: 1.5rem; border-radius: var(--border-radius); shadow: 0 4px 6px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border: 1px solid #eef2ee; }
-        .card h3 { margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; }
+        .header-box { margin-bottom: 2rem; }
+        .header-box h2 { font-weight: 300; font-size: 1.8rem; color: #5a6b67; }
 
-        /* Form & Inputs */
-        input, button { padding: 8px; border-radius: 6px; border: 1px solid #ddd; outline: none; }
-        button { background: var(--accent-color); color: white; border: none; cursor: pointer; transition: 0.3s; }
-        button:hover { opacity: 0.8; }
+        /* Thẻ Card */
+        .card { background: var(--card-bg); padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 1.5rem; border: 1px solid #eef2ee; }
+        .card h3 { margin-bottom: 1.2rem; font-size: 1rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* List styles */
-        .item-list { list-style: none; }
-        .item-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; font-size: 0.9rem; }
-        
-        .status-dot { height: 8px; width: 8px; background: var(--accent-color); border-radius: 50%; display: inline-block; margin-right: 10px; }
+        /* Form nhập liệu */
+        .input-group { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        input, select { padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; outline: none; flex: 1; min-width: 150px; }
+        button { padding: 10px 20px; border-radius: 8px; border: none; background: var(--accent-color); color: white; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* Danh sách hiển thị */
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f8f8f8; transition: 0.2s; }
+        .list-item:hover { background: #fafafa; }
+        .list-item.done span { text-decoration: line-through; color: #aaa; }
+        .delete-btn { color: var(--danger); cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+
+        /* Thanh tiến trình (Progress bar) */
+        .progress-container { background: #eee; border-radius: 10px; height: 10px; width: 100%; margin-top: 8px; position: relative; }
+        .progress-bar { background: var(--accent-color); height: 100%; border-radius: 10px; transition: 0.5s; width: 0%; }
+
+        /* Dashboard đặc biệt */
+        .db-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 16px; text-align: center; border-bottom: 4px solid var(--accent-color); }
+        .stat-card p { font-size: 0.8rem; color: #888; margin-bottom: 5px; }
+        .stat-card h4 { font-size: 1.5rem; color: var(--text-color); }
     </style>
 </head>
 <body>
 
     <nav>
-<h1>YOURSELF - WELCOME</h1>
+        <h1>YOURSELF</h1>
         <ul>
-            <li onclick="showSection('dashboard')">🏠 Tổng quan</li>
-            <li onclick="showSection('tasks')">✅ Công việc</li>
-            <li onclick="showSection('finance')">💰 Chi tiêu</li>
-            <li onclick="showSection('growth')">📚 Học tập</li>
-            <li onclick="showSection('books')">📖 Tủ sách</li>
+            <li class="active" onclick="switchTab('dashboard')">🏠 Tổng quan</li>
+            <li onclick="switchTab('tasks')">✅ Công việc</li>
+            <li onclick="switchTab('finance')">💰 Chi tiêu</li>
+            <li onclick="switchTab('growth')">📈 Phát triển</li>
+            <li onclick="switchTab('books')">📖 Tủ sách</li>
         </ul>
     </nav>
 
     <main>
-        <div class="header-date">
-            <h2 id="current-date">Chào buổi sáng!</h2>
-            <p id="quote">"Hành trình vạn dặm bắt đầu từ một bước chân."</p>
-        </div>
-
-        <div id="content-area" class="grid">
-            <!-- Cột trái: Kế hoạch ngày -->
-            <div class="left-col">
-                <div class="card">
-                    <h3>Kế hoạch hôm nay (Plan)</h3>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" id="taskInput" placeholder="Việc cần làm..." style="flex:1">
-                        <button onclick="addItem('task')">Thêm</button>
-                    </div>
-                    <ul id="taskList" class="item-list">
-                        <li><span class="status-dot"></span> Uống 2L nước</li>
-                        <li><span class="status-dot"></span> Đọc 10 trang sách</li>
-                    </ul>
+        <!-- TAB: DASHBOARD -->
+        <section id="dashboard" class="section active">
+            <div class="header-box">
+                <h2 id="welcome-msg">Chào ngày mới!</h2>
+                <p id="current-date" style="color: #888;"></p>
+            </div>
+            
+            <div class="db-grid">
+                <div class="stat-card">
+                    <p>Việc cần làm</p>
+                    <h4 id="stat-tasks">0</h4>
+                </div>
+                <div class="stat-card">
+                    <p>Số dư ví</p>
+                    <h4 id="stat-money">0đ</h4>
+                </div>
+                <div class="stat-card">
+                    <p>Sách đang đọc</p>
+                    <h4 id="stat-books">0</h4>
                 </div>
             </div>
 
-            <!-- Cột phải: Thông tin nhanh -->
-            <div class="right-col">
-                <div class="card">
-                    <h3>Chi tiêu gần đây</h3>
-                    <ul id="financeList" class="item-list">
-                        <li><span>Ăn sáng</span> <span>-30,000đ</span></li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3>Tiến độ sách</h3>
-                    <p style="font-size: 0.8rem; color: #888;">Đang đọc: <b>Nhà Giả Kim</b></p>
-                    <div style="width: 100%; background: #eee; height: 8px; border-radius: 5px; margin-top: 10px;">
-                        <div style="width: 65%; background: var(--accent-color); height: 100%; border-radius: 5px;"></div>
-                    </div>
-                </div>
+            <div class="card">
+                <h3>Câu nói động lực</h3>
+                <p id="quote-display" style="font-style: italic; color: #5a6b67;">"Cách duy nhất để làm được những việc tuyệt vời là yêu những gì bạn làm."</p>
             </div>
-        </div>
+        </section>
+
+        <!-- TAB: CÔNG VIỆC -->
+        <section id="tasks" class="section">
+            <div class="card">
+                <h3>Công việc cần xử lý</h3>
+                <div class="input-group">
+                    <input type="text" id="taskInput" placeholder="Thêm việc mới...">
+                    <button onclick="addTask()">Thêm</button>
+                </div>
+                <div id="taskList"></div>
+            </div>
+        </section>
+
+        <!-- TAB: CHI TIÊU -->
+        <section id="finance" class="section">
+            <div class="card">
+                <h3>Quản lý chi tiêu</h3>
+                <div class="input-group">
+                    <input type="text" id="finName" placeholder="Nội dung (VD: Ăn sáng)">
+                    <input type="number" id="finAmount" placeholder="Số tiền (VNĐ)">
+                    <select id="finType">
+                        <option value="out">Chi ra</option>
+                        <option value="in">Thu vào</option>
+                    </select>
+                    <button onclick="addFinance()">Lưu</button>
+                </div>
+                <div id="financeList"></div>
+            </div>
+        </section>
+
+        <!-- TAB: PHÁT TRIỂN -->
+        <section id="growth" class="section">
+            <div class="card">
+                <h3>Kỹ năng đang học</h3>
+                <div class="input-group">
+                    <input type="text" id="skillName" placeholder="Tên kỹ năng (VD: Tiếng Anh)">
+                    <input type="number" id="skillPercent" placeholder="Tiến độ % (0-100)">
+                    <button onclick="addSkill()">Thêm</button>
+                </div>
+                <div id="skillList"></div>
+            </div>
+        </section>
+
+        <!-- TAB: TỦ SÁCH -->
+        <section id="books" class="section">
+            <div class="card">
+                <h3>Tủ sách cá nhân</h3>
+                <div class="input-group">
+                    <input type="text" id="bookTitle" placeholder="Tên sách">
+                    <input type="number" id="bookCurrent" placeholder="Trang hiện tại">
+                    <input type="number" id="bookTotal" placeholder="Tổng số trang">
+                    <button onclick="addBook()">Thêm sách</button>
+                </div>
+                <div id="bookList"></div>
+            </div>
+        </section>
     </main>
 
     <script>
-        // Cập nhật ngày tháng
+        // QUẢN LÝ DỮ LIỆU BẰNG LOCALSTORAGE
+        let data = JSON.parse(localStorage.getItem('yourself_data')) || {
+            tasks: [],
+            finance: [],
+            skills: [],
+            books: []
+        };
+
+        function saveData() {
+            localStorage.setItem('yourself_data', JSON.stringify(data));
+            renderAll();
+        }
+
+        // CHUYỂN TAB
+        function switchTab(tabId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('nav li').forEach(l => l.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // NGÀY THÁNG
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('current-date').innerText = new Date().toLocaleDateString('vi-VN', options);
 
-        // Hàm thêm mục (Tạm thời lưu trên trình duyệt)
-        function addItem(type) {
+        // --- CÁC HÀM XỬ LÝ ---
+
+        function addTask() {
             const input = document.getElementById('taskInput');
-            if (input.value === "") return;
-            
-            const li = document.createElement('li');
-            li.innerHTML = `<span class="status-dot"></span> ${input.value}`;
-            document.getElementById('taskList').appendChild(li);
-            input.value = "";
+            if (!input.value) return;
+            data.tasks.push({ text: input.value, done: false });
+            input.value = '';
+            saveData();
         }
 
-        function showSection(section) {
-            // Chức năng này sẽ mở rộng khi bạn muốn xem chi tiết từng mục
-            alert("Bạn đang mở mục: " + section);
+        function addFinance() {
+            const name = document.getElementById('finName');
+            const amount = document.getElementById('finAmount');
+            const type = document.getElementById('finType');
+            if (!name.value || !amount.value) return;
+            data.finance.push({ name: name.value, amount: parseInt(amount.value), type: type.value });
+            name.value = ''; amount.value = '';
+            saveData();
         }
+
+        function addSkill() {
+            const name = document.getElementById('skillName');
+            const pct = document.getElementById('skillPercent');
+            if (!name.value || !pct.value) return;
+            data.skills.push({ name: name.value, pct: pct.value });
+            name.value = ''; pct.value = '';
+            saveData();
+        }
+
+        function addBook() {
+            const title = document.getElementById('bookTitle');
+            const curr = document.getElementById('bookCurrent');
+            const total = document.getElementById('bookTotal');
+            if (!title.value || !total.value) return;
+            data.books.push({ title: title.value, curr: curr.value || 0, total: total.value });
+            title.value = ''; curr.value = ''; total.value = '';
+            saveData();
+        }
+
+        // XÓA PHẦN TỬ
+        function deleteItem(category, index) {
+            data[category].splice(index, 1);
+            saveData();
+        }
+
+        function toggleTask(index) {
+            data.tasks[index].done = !data.tasks[index].done;
+            saveData();
+        }
+
+        // --- HIỂN THỊ DỮ LIỆU ---
+        function renderAll() {
+            // Render Tasks
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = data.tasks.map((t, i) => `
+                <div class="list-item ${t.done ? 'done' : ''}">
+                    <span onclick="toggleTask(${i})" style="cursor:pointer">● ${t.text}</span>
+                    <span class="delete-btn" onclick="deleteItem('tasks', ${i})">Xóa</span>
+                </div>
+            `).join('');
+
+            // Render Finance
+            let totalFinance = 0;
+            const financeList = document.getElementById('financeList');
+            financeList.innerHTML = data.finance.map((f, i) => {
+                totalFinance += (f.type === 'in' ? f.amount : -f.amount);
+                return `
+                <div class="list-item">
+                    <span>${f.name}</span>
+                    <span style="color: ${f.type === 'in' ? '#7d9d85' : '#e5a9a9'}">
+                        ${f.type === 'in' ? '+' : '-'}${f.amount.toLocaleString()}đ
+                    </span>
+                    <span class="delete-btn" onclick="deleteItem('finance', ${i})">Xóa</span>
+                </div>`;
+            }).join('');
+
+            // Render Skills
+            const skillList = document.getElementById('skillList');
+            skillList.innerHTML = data.skills.map((s, i) => `
+                <div style="margin-bottom:15px">
+                    <div style="display:flex; justify-content:space-between; font-size:0.9rem">
+                        <span>${s.name}</span><span>${s.pct}%</span>
+                    </div>
+                    <div class="progress-container"><div class="progress-bar" style="width:${s.pct}%"></div></div>
+                    <span class="delete-btn" onclick="deleteItem('skills', ${i})">Xóa</span>
+                </div>
+            `).join('');
+
+            // Render Books
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = data.books.map((b, i) => {
+                const pct = Math.round((b.curr / b.total) * 100);
+                return `
+                <div style="margin-bottom:15px">
+                    <div style="display:flex; justify-content:space-between; font-size:0.9rem">
+                        <span><b>${b.title}</b> (Trang ${b.curr}/${b.total})</span><span>${pct}%</span>
+                    </div>
+                    <div class="progress-container"><div class="progress-bar" style="width:${pct}%"></div></div>
+                    <span class="delete-btn" onclick="deleteItem('books', ${i})">Xóa</span>
+                </div>`;
+            }).join('');
+
+            // Update Dashboard Stats
+            document.getElementById('stat-tasks').innerText = data.tasks.filter(t => !t.done).length;
+            document.getElementById('stat-money').innerText = totalFinance.toLocaleString() + 'đ';
+            document.getElementById('stat-books').innerText = data.books.length;
+        }
+
+        // Chạy lần đầu
+        renderAll();
     </script>
 </body>
 </html>
