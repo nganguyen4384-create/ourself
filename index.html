@@ -3,69 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yourself - Personal Operating System</title>
+    <title>Yourself - Personal OS Ultimate</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f4f7f4;
-            --sidebar: #2d3436;
-            --accent: #7d9d85; /* Sage Green */
+            --bg: #f5f7f5;
+            --sidebar: #2c3e50;
+            --accent: #6b8e6b; /* Sage Green */
+            --deadline-color: #e74c3c;
+            --lang-color: #3498db;
             --card: #ffffff;
-            --text: #2d3436;
-            --text-light: #636e72;
-            --border: #eef2ee;
+            --text: #2c3e50;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
         /* SIDEBAR */
-        nav { width: 260px; background: var(--sidebar); color: white; padding: 2rem 1rem; display: flex; flex-direction: column; }
-        nav h1 { font-size: 1.5rem; margin-bottom: 2rem; letter-spacing: 4px; text-align: center; color: var(--accent); }
+        nav { width: 250px; background: var(--sidebar); color: white; padding: 2rem 1rem; flex-shrink: 0; display: flex; flex-direction: column; }
+        nav h1 { font-size: 1.3rem; margin-bottom: 2rem; letter-spacing: 4px; text-align: center; color: var(--accent); }
         nav ul { list-style: none; }
-        nav ul li { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 8px; transition: 0.3s; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+        nav ul li { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 8px; transition: 0.3s; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; }
         nav ul li:hover { background: rgba(255,255,255,0.1); }
         nav ul li.active { background: var(--accent); color: white; }
 
         /* MAIN CONTENT */
-        main { flex: 1; padding: 2rem; overflow-y: auto; }
+        main { flex: 1; padding: 2rem; overflow-y: auto; scroll-behavior: smooth; }
         .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h2 { font-weight: 600; margin-bottom: 1.5rem; font-size: 1.5rem; color: var(--text); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .card { background: var(--card); padding: 1.5rem; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 1.5rem; border: 1px solid #eee; }
+        .card h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 1.2rem; border-bottom: 1px solid #f5f5f5; padding-bottom: 8px; }
 
-        /* GRID SYSTEM */
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-        .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+        /* INPUT & BUTTONS */
+        .input-group { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+        input, select, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--accent); }
+        button { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        button:hover { filter: brightness(1.1); }
 
-        /* CARDS */
-        .card { background: var(--card); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border: 1px solid var(--border); }
-        .card h3 { font-size: 0.9rem; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+        /* DEADLINE LIST */
+        .deadline-item { display: flex; align-items: center; padding: 12px; background: #fff5f5; border-left: 4px solid var(--deadline-color); border-radius: 8px; margin-bottom: 8px; }
+        .deadline-time { font-weight: 700; color: var(--deadline-color); min-width: 60px; }
+        .deadline-text { flex: 1; margin-left: 10px; font-weight: 500; }
 
-        /* FORMS */
-        .input-row { display: flex; gap: 8px; margin-bottom: 1rem; }
-        input, select, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; font-size: 0.85rem; }
-        button { background: var(--accent); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        button:hover { opacity: 0.9; }
+        /* MEAL PLAN & COST */
+        .meal-card { background: #fdfcfb; border-radius: 10px; padding: 12px; margin-bottom: 10px; border: 1px solid #f1ece7; }
+        .meal-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.8rem; color: #a38b75; margin-bottom: 5px; }
+        .meal-cost { color: var(--accent); font-weight: 700; }
 
-        /* LISTS */
-        .item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #fafafa; font-size: 0.9rem; }
-        .item:hover { background: #fdfdfd; }
-        .time-tag { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; margin-right: 8px; font-weight: 600; }
-        .delete-btn { color: #fab1a0; cursor: pointer; font-weight: bold; margin-left: 10px; }
+        /* LANGUAGE PROGRESS */
+        .lang-progress-container { margin-bottom: 15px; }
+        .bar-bg { background: #eee; height: 6px; border-radius: 3px; margin-top: 5px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--lang-color); transition: 0.5s; width: 0%; }
 
-        /* PLANNING SPECIALS */
-        .plan-box { min-height: 100px; background: #fcfdfc; border: 1px dashed #d1dbd1; border-radius: 8px; padding: 10px; }
-        .category-tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; color: white; margin-right: 5px; }
-        .tag-work { background: #74b9ff; }
-        .tag-skill { background: #a29bfe; }
-        .tag-lang { background: #fdcb6e; }
-
-        /* MEAL PLAN TABLE */
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th, td { border: 1px solid #eee; padding: 10px; text-align: left; }
-        th { background: #f8faf8; color: var(--accent); }
+        .delete-btn { color: #ccc; cursor: pointer; transition: 0.3s; font-size: 0.8rem; }
+        .delete-btn:hover { color: var(--deadline-color); }
+        
+        .summary-box { background: var(--sidebar); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -73,149 +70,135 @@
     <nav>
         <h1>YOURSELF</h1>
         <ul>
-            <li class="active" onclick="switchTab('dashboard')">🏠 Dashboard</li>
-            <li onclick="switchTab('planning')">📅 Strategic Plan</li>
-            <li onclick="switchTab('daily')">☀️ Daily Focus</li>
-            <li onclick="switchTab('finance')">💰 Finance & Meals</li>
-            <li onclick="switchTab('library')">📖 Library</li>
+            <li class="active" onclick="switchTab('dash')">🏠 Tổng quan</li>
+            <li onclick="switchTab('planning')">📅 Chiến lược & Deadline</li>
+            <li onclick="switchTab('language')">🌍 Language Lab</li>
+            <li onclick="switchTab('meals')">🍳 Ăn uống & Chi tiêu</li>
         </ul>
     </nav>
 
     <main>
-        <!-- SECTION: DASHBOARD (TỔNG QUAN) -->
-        <section id="dashboard" class="section active">
-            <h2>Hôm nay của bạn</h2>
-            <div class="grid-2">
+        <!-- DASHBOARD -->
+        <section id="dash" class="section active">
+            <div class="summary-box">
                 <div>
-                    <div class="card">
-                        <h3>Lịch trình 24h sắp tới</h3>
-                        <div id="db-timeline"></div>
-                    </div>
+                    <h2 id="dash-date">Thứ Hai, 6 tháng 7</h2>
+                    <p style="opacity: 0.7; font-size: 0.9rem;">Chào mừng bạn quay lại với chính mình.</p>
                 </div>
-                <div>
-                    <div class="card">
-                        <h3>Mục tiêu tháng này</h3>
-                        <ul id="db-month-goals" style="list-style: none;"></ul>
-                    </div>
-                    <div class="card">
-                        <h3>Plan ăn uống hôm nay</h3>
-                        <p id="db-meal" style="font-size: 0.9rem; color: var(--text-light);"></p>
-                    </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 0.8rem; opacity: 0.7;">Tổng chi tiêu ăn uống hôm nay</p>
+                    <h2 id="total-meal-cost">0đ</h2>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Deadlines quan trọng hôm nay</h3>
+                    <div id="dash-deadlines"></div>
+                </div>
+                <div class="card">
+                    <h3>Thực đơn hôm nay</h3>
+                    <div id="dash-meals"></div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: STRATEGIC PLANNING (TUẦN/THÁNG) -->
+        <!-- PLANNING & DEADLINES -->
         <section id="planning" class="section">
-            <h2>Kế hoạch chiến lược</h2>
+            <h2>Kế hoạch & Hạn chót</h2>
             <div class="card">
-                <h3>Plan Tháng (Mục tiêu lớn)</h3>
-                <div class="input-row">
-                    <input type="text" id="monthGoalInput" style="flex:3" placeholder="Mục tiêu lớn trong tháng...">
-                    <button onclick="addMonthGoal()">Thêm mục tiêu</button>
-                </div>
-                <div id="monthGoalList"></div>
-            </div>
-
-            <div class="card">
-                <h3>Plan Tuần (Phân bổ nguồn lực)</h3>
-                <div class="grid-3">
-                    <div class="plan-box">
-                        <strong style="font-size: 0.8rem;">FULL-TIME JOB</strong>
-                        <textarea id="planWork" placeholder="Công việc chính..." style="width:100%; height:80px; margin-top:5px; border:none; background:transparent;"></textarea>
-                    </div>
-                    <div class="plan-box">
-                        <strong style="font-size: 0.8rem;">SKILLS (Kỹ năng mới)</strong>
-                        <textarea id="planSkill" placeholder="Học kỹ năng..." style="width:100%; height:80px; margin-top:5px; border:none; background:transparent;"></textarea>
-                    </div>
-                    <div class="plan-box">
-                        <strong style="font-size: 0.8rem;">LANGUAGES (Ngôn ngữ)</strong>
-                        <textarea id="planLang" placeholder="Học ngoại ngữ..." style="width:100%; height:80px; margin-top:5px; border:none; background:transparent;"></textarea>
-                    </div>
-                </div>
-                <button onclick="saveWeeklyPlan()" style="margin-top:10px">Lưu Plan Tuần</button>
-            </div>
-        </section>
-
-        <!-- SECTION: DAILY FOCUS (TO-DO CÓ DEADLINE) -->
-        <section id="daily" class="section">
-            <h2>Focus Hôm nay</h2>
-            <div class="card">
-                <h3>To-do list & Deadlines</h3>
-                <div class="input-row">
-                    <input type="time" id="todoTime" style="flex:1">
-                    <input type="text" id="todoTask" style="flex:3" placeholder="Bạn cần làm gì?">
-                    <select id="todoCat">
-                        <option value="work">Job</option>
-                        <option value="skill">Kỹ năng</option>
-                        <option value="lang">Ngôn ngữ</option>
-                        <option value="other">Khác</option>
+                <h3>Thêm Deadline / Công việc có giờ</h3>
+                <div class="input-group">
+                    <input type="time" id="dlTime">
+                    <input type="text" id="dlTask" style="flex:1" placeholder="Nhiệm vụ cần hoàn thành...">
+                    <select id="dlLevel">
+                        <option value="high">Khẩn cấp</option>
+                        <option value="normal">Bình thường</option>
                     </select>
-                    <button onclick="addTodo()">Thêm việc</button>
+                    <button onclick="addDeadline()">Ghim Deadline</button>
                 </div>
-                <div id="todoList"></div>
+                <div id="deadline-list"></div>
             </div>
-        </section>
 
-        <!-- SECTION: FINANCE & MEALS -->
-        <section id="finance" class="section">
-            <h2>Chi tiêu & Dinh dưỡng</h2>
             <div class="grid-2">
                 <div class="card">
-                    <h3>Chi tiết Chi tiêu</h3>
-                    <div class="input-row">
-                        <input type="text" id="finName" placeholder="Nội dung">
-                        <input type="number" id="finAmt" placeholder="VNĐ">
-                        <select id="finCat">
-                            <option value="Food">Ăn uống</option>
-                            <option value="Move">Di chuyển</option>
-                            <option value="Home">Sinh hoạt</option>
-                        </select>
-                        <button onclick="addFinance()">Lưu</button>
-                    </div>
-                    <div id="financeList"></div>
+                    <h3>Mục tiêu tháng</h3>
+                    <textarea id="monthGoal" style="width:100%; height:120px; border:none;" placeholder="Ghi chú những việc lớn phải xong trong tháng..."></textarea>
+                    <button onclick="saveAll()" style="width:100%; margin-top:10px">Lưu mục tiêu tháng</button>
                 </div>
                 <div class="card">
-                    <h3>Meal Plan (Thực đơn tuần)</h3>
-                    <table>
-                        <tr><th>Bữa</th><th>Thực đơn</th></tr>
-                        <tr><td>Sáng</td><td><input type="text" id="mealS" style="width:100%; border:none;"></td></tr>
-                        <tr><td>Trưa</td><td><input type="text" id="mealT" style="width:100%; border:none;"></td></tr>
-                        <tr><td>Tối</td><td><input type="text" id="mealToi" style="width:100%; border:none;"></td></tr>
-                    </table>
-                    <button onclick="saveMeal()" style="margin-top:10px; width:100%;">Cập nhật thực đơn</button>
+                    <h3>Focus Tuần (Lịch làm việc)</h3>
+                    <textarea id="weekFocus" style="width:100%; height:120px; border:none;" placeholder="Thứ 2: ..., Thứ 3: ..."></textarea>
+                    <button onclick="saveAll()" style="width:100%; margin-top:10px">Lưu Focus tuần</button>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: LIBRARY (SÁCH) -->
-        <section id="library" class="section">
-            <h2>Tủ sách phát triển</h2>
-            <div class="card">
-                <div class="input-row">
-                    <input type="text" id="bookName" placeholder="Tên sách">
-                    <input type="number" id="bookPage" placeholder="Trang hiện tại">
-                    <button onclick="addBook()">Thêm vào kệ</button>
+        <!-- LANGUAGE LAB -->
+        <section id="language" class="section">
+            <h2>Quản lý Học tập</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Tiến độ Ngôn ngữ</h3>
+                    <div class="input-group">
+                        <input type="text" id="langName" placeholder="Tên ngôn ngữ">
+                        <button onclick="addLang()">Thêm</button>
+                    </div>
+                    <div id="lang-list"></div>
                 </div>
-                <div id="bookList" class="grid-3"></div>
+                <div class="card">
+                    <h3>Kho từ vựng mới</h3>
+                    <div class="input-group">
+                        <input type="text" id="vocWord" placeholder="Từ mới">
+                        <input type="text" id="vocMean" placeholder="Nghĩa">
+                        <button onclick="addVocab()">Lưu</button>
+                    </div>
+                    <div id="vocab-list" style="max-height: 300px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MEALS & FINANCE -->
+        <section id="meals" class="section">
+            <h2>Kiểm soát Ăn uống & Chi tiêu</h2>
+            <div class="card">
+                <h3>Thêm món ăn & Chi phí</h3>
+                <div class="input-group">
+                    <select id="mealType">
+                        <option value="Sáng">Bữa Sáng</option>
+                        <option value="Trưa">Bữa Trưa</option>
+                        <option value="Tối">Bữa Tối</option>
+                        <option value="Khác">Ăn vặt/Khác</option>
+                    </select>
+                    <input type="text" id="mealName" style="flex:1" placeholder="Hôm nay ăn món gì?">
+                    <input type="number" id="mealPrice" placeholder="Giá tiền (VNĐ)">
+                    <button onclick="addMeal()">Thêm vào thực đơn</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Lịch sử ăn uống & Kiểm soát chi tiêu</h3>
+                <div id="meal-history-list"></div>
             </div>
         </section>
     </main>
 
     <script>
-        // DỮ LIỆU CƠ SỞ
-        let db = JSON.parse(localStorage.getItem('yourself_v2')) || {
-            monthGoals: [],
-            weekly: { work: '', skill: '', lang: '' },
-            daily: [],
-            finance: [],
-            meals: { s: '', t: '', toi: '' },
-            books: []
+        // DATA STORAGE
+        let state = JSON.parse(localStorage.getItem('yourself_v4')) || {
+            deadlines: [],
+            monthGoal: '',
+            weekFocus: '',
+            languages: [],
+            vocabs: [],
+            meals: []
         };
 
-        function save() { 
-            localStorage.setItem('yourself_v2', JSON.stringify(db)); 
-            render(); 
+        function saveAll() {
+            state.monthGoal = document.getElementById('monthGoal').value;
+            state.weekFocus = document.getElementById('weekFocus').value;
+            localStorage.setItem('yourself_v4', JSON.stringify(state));
+            render();
         }
 
         function switchTab(id) {
@@ -225,80 +208,117 @@
             event.currentTarget.classList.add('active');
         }
 
-        // CHỨC NĂNG CỤ THỂ
-        function addMonthGoal() {
-            const val = document.getElementById('monthGoalInput').value;
-            if(val) { db.monthGoals.push(val); document.getElementById('monthGoalInput').value=''; save(); }
+        // ADD LOGIC
+        function addDeadline() {
+            const time = document.getElementById('dlTime').value;
+            const task = document.getElementById('dlTask').value;
+            const level = document.getElementById('dlLevel').value;
+            if(time && task) {
+                state.deadlines.push({time, task, level});
+                document.getElementById('dlTask').value = '';
+                saveAll();
+            }
         }
 
-        function saveWeeklyPlan() {
-            db.weekly.work = document.getElementById('planWork').value;
-            db.weekly.skill = document.getElementById('planSkill').value;
-            db.weekly.lang = document.getElementById('planLang').value;
-            alert("Đã lưu kế hoạch tuần!");
-            save();
+        function addLang() {
+            const name = document.getElementById('langName').value;
+            if(name) {
+                state.languages.push({name, p: 0});
+                document.getElementById('langName').value = '';
+                saveAll();
+            }
         }
 
-        function addTodo() {
-            const time = document.getElementById('todoTime').value;
-            const task = document.getElementById('todoTask').value;
-            const cat = document.getElementById('todoCat').value;
-            if(time && task) { db.daily.push({time, task, cat, done: false}); save(); }
+        function updateLang(idx, val) {
+            state.languages[idx].p = val;
+            saveAll();
         }
 
-        function addFinance() {
-            const name = document.getElementById('finName').value;
-            const amt = document.getElementById('finAmt').value;
-            const cat = document.getElementById('finCat').value;
-            if(name && amt) { db.finance.push({name, amt, cat}); save(); }
+        function addVocab() {
+            const w = document.getElementById('vocWord').value;
+            const m = document.getElementById('vocMean').value;
+            if(w) {
+                state.vocabs.unshift({w, m});
+                document.getElementById('vocWord').value = '';
+                document.getElementById('vocMean').value = '';
+                saveAll();
+            }
         }
 
-        function saveMeal() {
-            db.meals.s = document.getElementById('mealS').value;
-            db.meals.t = document.getElementById('mealT').value;
-            db.meals.toi = document.getElementById('mealToi').value;
-            save();
+        function addMeal() {
+            const type = document.getElementById('mealType').value;
+            const name = document.getElementById('mealName').value;
+            const price = parseInt(document.getElementById('mealPrice').value) || 0;
+            if(name) {
+                state.meals.unshift({type, name, price, date: new Date().toLocaleDateString()});
+                document.getElementById('mealName').value = '';
+                document.getElementById('mealPrice').value = '';
+                saveAll();
+            }
         }
 
-        function deleteItem(type, index) {
-            db[type].splice(index, 1);
-            save();
+        function remove(cat, idx) {
+            state[cat].splice(idx, 1);
+            saveAll();
         }
 
-        // HIỂN THỊ
+        // RENDER LOGIC
         function render() {
-            // Dashboard
-            document.getElementById('db-month-goals').innerHTML = db.monthGoals.map(g => `<li>• ${g}</li>`).join('');
-            document.getElementById('db-timeline').innerHTML = db.daily
-                .sort((a,b) => a.time.localeCompare(b.time))
-                .map(d => `<div class="item"><span class="time-tag">${d.time}</span> ${d.task}</div>`).join('');
-            document.getElementById('db-meal').innerText = `Sáng: ${db.meals.s} | Trưa: ${db.meals.t} | Tối: ${db.meals.toi}`;
+            // Dashboard Date
+            const d = new Date();
+            document.getElementById('dash-date').innerText = d.toLocaleDateString('vi-VN', {weekday:'long', day:'numeric', month:'long'});
 
-            // Plan tháng
-            document.getElementById('monthGoalList').innerHTML = db.monthGoals.map((g, i) => `
-                <div class="item"><span>${g}</span><span class="delete-btn" onclick="deleteItem('monthGoals', ${i})">Xóa</span></div>
+            // Deadlines
+            const dlSorted = state.deadlines.sort((a,b) => a.time.localeCompare(b.time));
+            const dlHTML = dlSorted.map((item, i) => `
+                <div class="deadline-item" style="${item.level === 'high' ? 'background:#fff0f0' : 'background:#f0f7f0; border-left-color:#6b8e6b'}">
+                    <div class="deadline-time" style="color:${item.level === 'high' ? '#e74c3c' : '#6b8e6b'}">${item.time}</div>
+                    <div class="deadline-text">${item.task}</div>
+                    <div class="delete-btn" onclick="remove('deadlines', ${i})">✕</div>
+                </div>
             `).join('');
+            document.getElementById('dash-deadlines').innerHTML = dlHTML || '<p style="color:#ccc; font-size:0.8rem">Không có deadline nào hôm nay.</p>';
+            document.getElementById('deadline-list').innerHTML = dlHTML;
 
-            // Daily To-do
-            document.getElementById('todoList').innerHTML = db.daily.map((d, i) => `
-                <div class="item">
-                    <span><span class="category-tag tag-${d.cat}">${d.cat}</span> <span class="time-tag">${d.time}</span> ${d.task}</span>
-                    <span class="delete-btn" onclick="deleteItem('daily', ${i})">Xóa</span>
+            // Meals
+            const todayStr = new Date().toLocaleDateString();
+            const todayMeals = state.meals.filter(m => m.date === todayStr);
+            const totalMealCost = todayMeals.reduce((acc, curr) => acc + curr.price, 0);
+            
+            document.getElementById('total-meal-cost').innerText = totalMealCost.toLocaleString() + 'đ';
+            
+            const mealHTML = todayMeals.map((m, i) => `
+                <div class="meal-card">
+                    <div class="meal-header"><span>${m.type}</span> <span class="meal-cost">${m.price.toLocaleString()}đ</span></div>
+                    <div style="font-size:0.9rem; display:flex; justify-content:space-between">
+                        ${m.name} <span class="delete-btn" onclick="remove('meals', ${i})">✕</span>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('dash-meals').innerHTML = mealHTML || '<p style="color:#ccc; font-size:0.8rem">Chưa có món ăn nào.</p>';
+            document.getElementById('meal-history-list').innerHTML = mealHTML;
+
+            // Languages
+            document.getElementById('lang-list').innerHTML = state.languages.map((l, i) => `
+                <div class="lang-progress-container">
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem">
+                        <span>${l.name}</span> <span>${l.p}%</span>
+                    </div>
+                    <input type="range" value="${l.p}" style="width:100%" onchange="updateLang(${i}, this.value)">
+                    <div class="bar-bg"><div class="bar-fill" style="width:${l.p}%"></div></div>
                 </div>
             `).join('');
 
-            // Finance
-            document.getElementById('financeList').innerHTML = db.finance.map((f, i) => `
-                <div class="item"><span><b>[${f.cat}]</b> ${f.name}</span> <span>${parseInt(f.amt).toLocaleString()}đ <span class="delete-btn" onclick="deleteItem('finance', ${i})">Xóa</span></span></div>
+            // Vocab
+            document.getElementById('vocab-list').innerHTML = state.vocabs.map((v, i) => `
+                <div style="padding:8px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; font-size:0.85rem">
+                    <span><b>${v.w}</b>: ${v.m}</span> <span class="delete-btn" onclick="remove('vocabs', ${i})">✕</span>
+                </div>
             `).join('');
 
-            // Fill inputs (để không bị mất khi load lại)
-            document.getElementById('planWork').value = db.weekly.work;
-            document.getElementById('planSkill').value = db.weekly.skill;
-            document.getElementById('planLang').value = db.weekly.lang;
-            document.getElementById('mealS').value = db.meals.s;
-            document.getElementById('mealT').value = db.meals.t;
-            document.getElementById('mealToi').value = db.meals.toi;
+            // TextArea Sync
+            document.getElementById('monthGoal').value = state.monthGoal;
+            document.getElementById('weekFocus').value = state.weekFocus;
         }
 
         render();
