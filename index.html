@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yourself - Hệ điều hành cá nhân</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f0f4f0;
+            --sidebar-color: #ffffff;
+            --accent-color: #8da399;
+            --text-color: #4a5553;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; }
+
+        /* Sidebar */
+        nav { width: 250px; background: var(--sidebar-color); padding: 2rem; border-right: 1px solid #e0eadd; display: flex; flex-direction: column; }
+        nav h1 { font-size: 1.5rem; margin-bottom: 2rem; color: var(--accent-color); letter-spacing: 2px; }
+        nav ul { list-style: none; }
+        nav ul li { padding: 12px 0; cursor: pointer; transition: 0.3s; font-weight: 500; }
+        nav ul li:hover { color: var(--accent-color); transform: translateX(5px); }
+
+        /* Main Content */
+        main { flex: 1; padding: 3rem; overflow-y: auto; }
+        .header-date { margin-bottom: 2rem; }
+        .header-date h2 { font-weight: 300; font-size: 2rem; }
+
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+
+        .card { background: var(--card-bg); padding: 1.5rem; border-radius: var(--border-radius); shadow: 0 4px 6px rgba(0,0,0,0.02); margin-bottom: 1.5rem; border: 1px solid #eef2ee; }
+        .card h3 { margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; }
+
+        /* Form & Inputs */
+        input, button { padding: 8px; border-radius: 6px; border: 1px solid #ddd; outline: none; }
+        button { background: var(--accent-color); color: white; border: none; cursor: pointer; transition: 0.3s; }
+        button:hover { opacity: 0.8; }
+
+        /* List styles */
+        .item-list { list-style: none; }
+        .item-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; font-size: 0.9rem; }
+        
+        .status-dot { height: 8px; width: 8px; background: var(--accent-color); border-radius: 50%; display: inline-block; margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1>YOURSELF</h1>
+        <ul>
+            <li onclick="showSection('dashboard')">🏠 Tổng quan</li>
+            <li onclick="showSection('tasks')">✅ Công việc</li>
+            <li onclick="showSection('finance')">💰 Chi tiêu</li>
+            <li onclick="showSection('growth')">📚 Học tập</li>
+            <li onclick="showSection('books')">📖 Tủ sách</li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="header-date">
+            <h2 id="current-date">Chào buổi sáng!</h2>
+            <p id="quote">"Hành trình vạn dặm bắt đầu từ một bước chân."</p>
+        </div>
+
+        <div id="content-area" class="grid">
+            <!-- Cột trái: Kế hoạch ngày -->
+            <div class="left-col">
+                <div class="card">
+                    <h3>Kế hoạch hôm nay (Plan)</h3>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="taskInput" placeholder="Việc cần làm..." style="flex:1">
+                        <button onclick="addItem('task')">Thêm</button>
+                    </div>
+                    <ul id="taskList" class="item-list">
+                        <li><span class="status-dot"></span> Uống 2L nước</li>
+                        <li><span class="status-dot"></span> Đọc 10 trang sách</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cột phải: Thông tin nhanh -->
+            <div class="right-col">
+                <div class="card">
+                    <h3>Chi tiêu gần đây</h3>
+                    <ul id="financeList" class="item-list">
+                        <li><span>Ăn sáng</span> <span>-30,000đ</span></li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Tiến độ sách</h3>
+                    <p style="font-size: 0.8rem; color: #888;">Đang đọc: <b>Nhà Giả Kim</b></p>
+                    <div style="width: 100%; background: #eee; height: 8px; border-radius: 5px; margin-top: 10px;">
+                        <div style="width: 65%; background: var(--accent-color); height: 100%; border-radius: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Cập nhật ngày tháng
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('vi-VN', options);
+
+        // Hàm thêm mục (Tạm thời lưu trên trình duyệt)
+        function addItem(type) {
+            const input = document.getElementById('taskInput');
+            if (input.value === "") return;
+            
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="status-dot"></span> ${input.value}`;
+            document.getElementById('taskList').appendChild(li);
+            input.value = "";
+        }
+
+        function showSection(section) {
+            // Chức năng này sẽ mở rộng khi bạn muốn xem chi tiết từng mục
+            alert("Bạn đang mở mục: " + section);
+        }
+    </script>
+</body>
+</html>
